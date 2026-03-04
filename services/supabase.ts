@@ -3,7 +3,15 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let supabaseClient: any = null;
+
+export const getSupabase = () => {
+  if (!supabaseUrl || !supabaseAnonKey) return null;
+  if (!supabaseClient) {
+    supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+  }
+  return supabaseClient;
+};
 
 export interface SupabaseUser {
   id: string;
@@ -15,10 +23,11 @@ export interface SupabaseUser {
 }
 
 export const syncUserToSupabase = async (user: { id: string, name: string, points: number, todayProgress: number, avatar: string }) => {
-  if (!supabaseUrl || !supabaseAnonKey) return null;
+  const client = getSupabase();
+  if (!client) return null;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('users')
       .upsert({
         id: user.id,
@@ -38,10 +47,11 @@ export const syncUserToSupabase = async (user: { id: string, name: string, point
 };
 
 export const getGlobalLeaderboard = async () => {
-  if (!supabaseUrl || !supabaseAnonKey) return [];
+  const client = getSupabase();
+  if (!client) return [];
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('users')
       .select('*')
       .order('points', { ascending: false })
