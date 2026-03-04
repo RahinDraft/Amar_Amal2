@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { SocialGroup, GroupMember } from '../types';
 import { getFromStorage, saveToStorage } from '../utils/storage';
+import { getGlobalLeaderboard } from '../services/supabase';
 
 interface SocialProps {
   userPoints: number;
@@ -23,19 +24,27 @@ const Social: React.FC<SocialProps> = ({ userPoints, userName, userId, userProgr
 
   useEffect(() => {
     if (!userId || isAdmin) return;
-    const members = getFromStorage<GroupMember[]>('ramadan_global_members', []);
-    const memberIndex = members.findIndex(m => m.id === userId);
-    let updatedGlobal: GroupMember[];
-    if (memberIndex > -1) {
-      updatedGlobal = members.map((m, idx) => 
-        idx === memberIndex ? { ...m, name: userName, points: userPoints, todayProgress: userProgress } : m
-      );
-    } else {
-      updatedGlobal = [...members, { id: userId, name: userName, points: userPoints, todayProgress: userProgress, avatar: '👤' }];
-    }
-    saveToStorage('ramadan_global_members', updatedGlobal);
-    setGlobalMembers(updatedGlobal);
-  }, [userPoints, userProgress, userName, userId, isAdmin]);
+    
+    const fetchGlobal = async () => {
+      const members = await getGlobalLeaderboard();
+      if (members && members.length > 0) {
+        const formatted: GroupMember[] = members.map((m: any) => ({
+          id: m.id,
+          name: m.name,
+          points: m.points,
+          todayProgress: m.today_progress,
+          avatar: m.avatar || '👤'
+        }));
+        setGlobalMembers(formatted);
+        saveToStorage('ramadan_global_members', formatted);
+      }
+    };
+
+    fetchGlobal();
+    // Refresh every 30 seconds if tab is active
+    const interval = setInterval(fetchGlobal, 30000);
+    return () => clearInterval(interval);
+  }, [userId, isAdmin]);
 
   useEffect(() => {
     if (group && userId && !isAdmin) {

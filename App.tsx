@@ -4,6 +4,7 @@ import { View, Deed, DailyRecord } from './types';
 import { DEFAULT_DEEDS, SILENT_MODE_ITEMS } from './constants';
 import { getFromStorage, saveToStorage, getTodayDateString } from './utils/storage';
 import { getAddressFromCoords } from './services/locationService';
+import { syncUserToSupabase } from './services/supabase';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import DailyDeeds from './components/DailyDeeds';
@@ -236,6 +237,18 @@ const App: React.FC = () => {
   }, []);
   const todayPoints = calculatePoints(currentRecord);
   const userProgress = deeds.length > 0 ? Math.round((currentRecord.completedDeeds.length / deeds.length) * 100) : 0;
+
+  useEffect(() => {
+    if (userId && userName && !isAdmin) {
+      syncUserToSupabase({
+        id: userId,
+        name: userName,
+        points: totalPoints,
+        todayProgress: userProgress,
+        avatar: '👤'
+      });
+    }
+  }, [userId, userName, totalPoints, userProgress, isAdmin]);
 
   if (!userName) {
     return <Onboarding onComplete={handleOnboardingComplete} correctPin={adminPin} devName={devName} />;
