@@ -1,0 +1,9 @@
+{
+  "name": "আমার আমল",
+  "description": "A comprehensive Ramadan management app with daily deeds tracking, Quran progress, prayer times, and AI-powered spiritual motivation.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
