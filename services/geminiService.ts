@@ -1,8 +1,20 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+let aiInstance: any = null;
+
+const getAI = () => {
+  const apiKey = process.env.GEMINI_API_KEY || "";
+  if (!apiKey) return null;
+  if (!aiInstance) {
+    aiInstance = new GoogleGenAI({ apiKey });
+  }
+  return aiInstance;
+};
 
 export const getRamadanMotivation = async (userName: string, points: number) => {
+  const ai = getAI();
+  if (!ai) return "রমজান মোবারক! আপনার আমল জারি রাখুন।";
+  
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -15,6 +27,13 @@ export const getRamadanMotivation = async (userName: string, points: number) => 
 };
 
 export const getQuizQuestion = async () => {
+  const ai = getAI();
+  if (!ai) return {
+    question: "ইসলামের স্তম্ভ কয়টি?",
+    options: ["৩টি", "৪টি", "৫টি", "৬টি"],
+    correctIndex: 2
+  };
+
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",

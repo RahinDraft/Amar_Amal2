@@ -1,13 +1,18 @@
 export const saveToStorage = <T,>(key: string, data: T): void => {
-  localStorage.setItem(key, JSON.stringify(data));
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.error('Error saving to storage', e);
+  }
 };
 
 export const getFromStorage = <T,>(key: string, defaultValue: T): T => {
-  const stored = localStorage.getItem(key);
-  if (!stored) return defaultValue;
   try {
+    const stored = localStorage.getItem(key);
+    if (!stored) return defaultValue;
     return JSON.parse(stored) as T;
-  } catch {
+  } catch (e) {
+    console.error('Error reading from storage', e);
     return defaultValue;
   }
 };
