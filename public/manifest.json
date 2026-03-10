@@ -1,0 +1,20 @@
+{
+  "short_name": "আমার আমল",
+  "name": "আমার আমল - রমজান ও আমল ট্র্যাকার",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/islamic/192/192",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://picsum.photos/seed/islamic/512/512",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#022c22",
+  "background_color": "#022c22"
+}
