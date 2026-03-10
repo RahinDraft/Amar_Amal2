@@ -32,6 +32,7 @@ if (!rootElement) {
 }
 
 console.log('Mounting React app...');
+(window as any).reactMounted = true;
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>

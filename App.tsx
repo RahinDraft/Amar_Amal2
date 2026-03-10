@@ -17,6 +17,18 @@ import Admin from './components/Admin';
 import Quiz from './components/Quiz';
 
 const App: React.FC = () => {
+  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      setHasError(true);
+      setError(event.error);
+    };
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
+
   const [userName, setUserName] = useState<string | null>(() => getFromStorage('ramadan_user_name', null));
   const [userId, setUserId] = useState<string | null>(() => getFromStorage('ramadan_user_id', null));
   const [isAdmin, setIsAdmin] = useState<boolean>(() => getFromStorage('ramadan_is_admin', false));
@@ -252,6 +264,25 @@ const App: React.FC = () => {
       });
     }
   }, [userId, userName, totalPoints, userProgress, isAdmin]);
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-[#022c22] flex flex-col items-center justify-center p-8 text-center">
+        <div className="text-6xl mb-6">⚠️</div>
+        <h1 className="text-2xl font-bold text-amber-400 mb-4">একটি সমস্যা হয়েছে</h1>
+        <p className="text-emerald-500 text-sm mb-8">অ্যাপটি লোড করতে সমস্যা হচ্ছে। দয়া করে অ্যাপটি বন্ধ করে আবার চালু করুন।</p>
+        <div className="bg-black/30 p-4 rounded-xl border border-red-900/30 w-full max-w-xs mb-8">
+          <p className="text-[10px] font-mono text-red-400 break-words">{error?.message || 'Unknown Error'}</p>
+        </div>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="bg-amber-500 text-emerald-950 font-bold px-8 py-3 rounded-full shadow-lg"
+        >
+          আবার চেষ্টা করুন
+        </button>
+      </div>
+    );
+  }
 
   if (!userName) {
     return <Onboarding onComplete={handleOnboardingComplete} correctPin={adminPin} devName={devName} />;

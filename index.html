@@ -16,8 +16,50 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
 </head>
-<body class="min-h-screen">
-    <div id="root"></div>
+<body class="min-h-screen bg-[#022c22]">
+    <div id="root">
+        <div id="initial-loader" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: #fbbf24; font-family: 'Hind Siliguri', sans-serif;">
+            <div style="font-size: 60px; margin-bottom: 20px; animation: pulse 2s infinite;">🌙</div>
+            <div style="font-size: 24px; font-weight: bold; margin-bottom: 8px;">আমার আমল</div>
+            <div style="font-size: 14px; opacity: 0.6;">লোড হচ্ছে, দয়া করে অপেক্ষা করুন...</div>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.8; }
+                    50% { transform: scale(1.1); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.8; }
+                }
+            </style>
+        </div>
+    </div>
     <script type="module" src="./index.tsx"></script>
+    <script>
+        // If React hasn't mounted in 15 seconds, show a refresh button
+        setTimeout(function() {
+            if (!window.reactMounted) {
+                var loader = document.getElementById('initial-loader');
+                if (loader) {
+                    var btn = document.createElement('button');
+                    btn.innerHTML = 'আবার চেষ্টা করুন';
+                    btn.style.marginTop = '20px';
+                    btn.style.background = '#fbbf24';
+                    btn.style.color = '#022c22';
+                    btn.style.border = 'none';
+                    btn.style.padding = '12px 24px';
+                    btn.style.borderRadius = '24px';
+                    btn.style.fontWeight = 'bold';
+                    btn.style.fontSize = '14px';
+                    btn.onclick = function() { window.location.reload(); };
+                    loader.appendChild(btn);
+                    
+                    var msg = document.createElement('div');
+                    msg.innerHTML = 'ইন্টারনেট কানেকশন চেক করুন';
+                    msg.style.marginTop = '10px';
+                    msg.style.fontSize = '10px';
+                    msg.style.opacity = '0.5';
+                    loader.appendChild(msg);
+                }
+            }
+        }, 15000);
+    </script>
 </body>
 </html>
