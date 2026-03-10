@@ -131,10 +131,10 @@ const Dashboard: React.FC<DashboardProps> = ({
     fetchPrayerData();
     if (!isAdmin) {
       fetchAiMotivation();
-      // Auto-update motivation every 2 minutes
+      // Auto-update motivation every 30 seconds
       const motivationTimer = setInterval(() => {
         fetchAiMotivation(true);
-      }, 2 * 60 * 1000);
+      }, 30 * 1000);
       return () => clearInterval(motivationTimer);
     }
   }, [today, isAdmin, fetchPrayerData, fetchAiMotivation]);

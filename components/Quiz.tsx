@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { QuizQuestion } from '../types';
 import { QUIZ_QUESTIONS } from '../constants';
-import { getQuizQuestion } from '../services/geminiService';
+import { getQuizQuestions } from '../services/geminiService';
 import { getFromStorage, saveToStorage } from '../utils/storage';
 
 interface QuizProps {
@@ -17,53 +17,44 @@ const Quiz: React.FC<QuizProps> = ({ onAwardPoints, currentQuizPoints }) => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [isFetchingBackground, setIsFetchingBackground] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-  // Initialize questions from cache or static list
-  useEffect(() => {
-    const cached = getFromStorage<QuizQuestion[]>('ramadan_cached_quiz', []);
-    
-    // Filter out old cached questions with the problematic explanation
-    const validCached = cached.filter(q => q.explanation !== "সঠিক উত্তর দেওয়ার জন্য ধন্যবাদ!");
-    
-    if (validCached.length > 0) {
-      // Mix cached questions with static ones to ensure 10 questions
-      const combined = [...validCached, ...[...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5)];
-      setQuestions(combined.slice(0, 10));
-    } else {
-      // Fallback to static shuffled questions
-      setQuestions([...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10));
-    }
-    
-    // Always fetch fresh questions in the background for the NEXT time
-    fetchNewQuestionsInBackground();
-  }, []);
-
-  const fetchNewQuestionsInBackground = async () => {
-    if (isFetchingBackground) return;
-    setIsFetchingBackground(true);
+  const fetchNewQuestions = useCallback(async () => {
+    setIsFetching(true);
     try {
-      const newQuestion = await getQuizQuestion();
-      if (newQuestion && newQuestion.question) {
-        const formatted: QuizQuestion = {
-          id: `ai_${Date.now()}`,
-          question: newQuestion.question,
-          options: newQuestion.options,
-          correctAnswer: newQuestion.correctIndex,
+      const newQuestions = await getQuizQuestions(10);
+      if (newQuestions && newQuestions.length > 0) {
+        const formatted: QuizQuestion[] = newQuestions.map((q: any, idx: number) => ({
+          id: `ai_${Date.now()}_${idx}`,
+          question: q.question,
+          options: q.options,
+          correctAnswer: q.correctIndex,
           points: 10,
-          explanation: newQuestion.explanation || "এই প্রশ্নের সঠিক উত্তরটি কুরআন ও সুন্নাহর আলোকে প্রদান করা হয়েছে।"
-        };
-        const cached = getFromStorage<QuizQuestion[]>('ramadan_cached_quiz', []);
-        // Also filter the existing cache when saving new ones
-        const validCached = cached.filter(q => q.explanation !== "সঠিক উত্তর দেওয়ার জন্য ধন্যবাদ!");
-        saveToStorage('ramadan_cached_quiz', [...validCached, formatted].slice(-5));
+          explanation: q.explanation || "এই প্রশ্নের সঠিক উত্তরটি কুরআন ও সুন্নাহর আলোকে প্রদান করা হয়েছে।"
+        }));
+        setQuestions(formatted);
+        saveToStorage('ramadan_cached_quiz', formatted);
+      } else {
+        // Fallback to static shuffled questions if AI fails
+        setQuestions([...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10));
       }
     } catch (error) {
-      console.error("Background quiz fetch failed", error);
+      console.error("Quiz fetch failed", error);
+      setQuestions([...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10));
     } finally {
-      setIsFetchingBackground(false);
+      setIsFetching(false);
     }
-  };
+  }, []);
+
+  // Initialize questions
+  useEffect(() => {
+    const cached = getFromStorage<QuizQuestion[]>('ramadan_cached_quiz', []);
+    if (cached.length >= 10) {
+      setQuestions(cached);
+    } else {
+      fetchNewQuestions();
+    }
+  }, [fetchNewQuestions]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -95,29 +86,15 @@ const Quiz: React.FC<QuizProps> = ({ onAwardPoints, currentQuizPoints }) => {
   };
 
   const resetQuiz = () => {
-    // Try to get the questions we fetched in the background
-    const cached = getFromStorage<QuizQuestion[]>('ramadan_cached_quiz', []);
-    const validCached = cached.filter(q => q.explanation !== "সঠিক উত্তর দেওয়ার জন্য ধন্যবাদ!");
-    
-    if (validCached.length > 0) {
-      const combined = [...validCached, ...[...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5)];
-      setQuestions(combined.slice(0, 10));
-      saveToStorage('ramadan_cached_quiz', []); // Clear cache after use
-    } else {
-      setQuestions([...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10));
-    }
-    
     setCurrentQuestionIndex(0);
     setSelectedOption(null);
     setIsAnswered(false);
     setScore(0);
     setShowResult(false);
-    
-    // Fetch again for the next round
-    fetchNewQuestionsInBackground();
+    fetchNewQuestions(); // Fetch fresh 10 questions for the next round
   };
 
-  if (!currentQuestion && !showResult) {
+  if (isFetching && questions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 space-y-4">
         <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>

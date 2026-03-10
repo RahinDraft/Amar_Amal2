@@ -18,7 +18,7 @@ export const getRamadanMotivation = async (userName: string, points: number) => 
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Provide a very short, inspiring Quranic verse or a short Hadith in Bengali with its reference. The user ${userName} is tracking their Ramadan deeds. Keep it under 100 characters if possible. Output ONLY the text and reference.`,
+      contents: `Provide a very short, inspiring Quranic verse or a short Hadith in Bengali with its reference. The user ${userName} is tracking their Ramadan deeds and has earned ${points} points. Keep it under 100 characters if possible. Output ONLY the text and reference. Do not repeat the same one if possible.`,
     });
     return response.text || "রমজান মোবারক! আপনার আমল জারি রাখুন।";
   } catch (error) {
@@ -26,26 +26,20 @@ export const getRamadanMotivation = async (userName: string, points: number) => 
   }
 };
 
-export const getQuizQuestion = async () => {
+export const getQuizQuestions = async (count: number = 10) => {
   const ai = getAI();
-  if (!ai) return {
-    question: "ইসলামের স্তম্ভ কয়টি?",
-    options: ["৩টি", "৪টি", "৫টি", "৬টি"],
-    correctIndex: 2
-  };
+  if (!ai) return [];
 
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: "Generate a simple Islamic quiz question in Bengali with 4 options, the correct answer index (0-3), and a short explanation for the correct answer. Format as JSON: {question, options, correctIndex, explanation}",
+      contents: `Generate ${count} unique Islamic quiz questions in Bengali. Each question should have 4 options, the correct answer index (0-3), and a short explanation for the correct answer. Format as a JSON array of objects: [{question, options, correctIndex, explanation}, ...]`,
       config: { responseMimeType: "application/json" }
     });
-    return JSON.parse(response.text || "{}");
+    const text = response.text || "[]";
+    return JSON.parse(text);
   } catch (error) {
-    return {
-      question: "ইসলামের স্তম্ভ কয়টি?",
-      options: ["৩টি", "৪টি", "৫টি", "৬টি"],
-      correctIndex: 2
-    };
+    console.error("Failed to fetch quiz questions", error);
+    return [];
   }
 };
