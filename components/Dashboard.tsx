@@ -275,20 +275,20 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Top Ramadan Card */}
       <section className="bg-emerald-900/40 p-5 rounded-xl border border-emerald-800/30 flex justify-between items-center">
         <div className="space-y-1">
-          <h2 className="text-xl font-bold text-emerald-400">{getRamadanDay()} রমযান, ১৪৪৭ হিজরী</h2>
-          <p className="text-sm opacity-80">{getEnglishDate()}</p>
-          <p className="text-sm opacity-60">{getBengaliDate()}</p>
+          <h2 className="text-2xl font-bold text-emerald-400">{getRamadanDay()} রমযান, ১৪৪৭ হিজরী</h2>
+          <p className="text-base opacity-80">{getEnglishDate()}</p>
+          <p className="text-base opacity-60">{getBengaliDate()}</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-center">
             <div className="text-amber-400 text-xl">☀️</div>
-            <div className="text-sm font-bold">{format12h(prayers?.sunrise || '')}</div>
-            <div className="text-[10px] opacity-60">সূর্যোদয়</div>
+            <div className="text-base font-bold">{format12h(prayers?.sunrise || '')}</div>
+            <div className="text-xs opacity-60">সূর্যোদয়</div>
           </div>
           <div className="text-center">
             <div className="text-amber-400 text-xl">🌇</div>
-            <div className="text-sm font-bold">{format12h(prayers?.maghrib || '')}</div>
-            <div className="text-[10px] opacity-60">সূর্যাস্ত</div>
+            <div className="text-base font-bold">{format12h(prayers?.maghrib || '')}</div>
+            <div className="text-xs opacity-60">সূর্যাস্ত</div>
           </div>
         </div>
       </section>
@@ -296,16 +296,16 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Sahri & Iftar Quick View */}
       <section className="grid grid-cols-3 gap-1.5 sm:gap-2">
         <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-[10px] sm:text-sm font-bold text-slate-100">{format12h(prayers?.imsak || '')}</div>
-          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">সাহরি শেষ</div>
+          <div className="text-xs sm:text-base font-bold text-slate-100">{format12h(prayers?.imsak || '')}</div>
+          <div className="text-[10px] sm:text-xs opacity-60 uppercase font-bold tracking-tighter">সাহরি শেষ</div>
         </div>
         <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-[10px] sm:text-sm font-bold text-slate-100">{format12h(prayers?.maghrib || '')}</div>
-          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">ইফতারের সময়</div>
+          <div className="text-xs sm:text-base font-bold text-slate-100">{format12h(prayers?.maghrib || '')}</div>
+          <div className="text-[10px] sm:text-xs opacity-60 uppercase font-bold tracking-tighter">ইফতারের সময়</div>
         </div>
         <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-[10px] sm:text-sm font-bold text-emerald-400 font-mono">{countdown?.time || '--:--:--'}</div>
-          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">{countdown?.label || 'সাহরির বাকি'}</div>
+          <div className="text-xs sm:text-base font-bold text-emerald-400 font-mono">{countdown?.time || '--:--:--'}</div>
+          <div className="text-[10px] sm:text-xs opacity-60 uppercase font-bold tracking-tighter">{countdown?.label || 'সাহরির বাকি'}</div>
         </div>
       </section>
 
@@ -315,10 +315,10 @@ const Dashboard: React.FC<DashboardProps> = ({
           <div className="absolute -right-4 -top-4 text-6xl opacity-10 group-hover:scale-110 transition-transform">📖</div>
           <div className="relative z-10">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-emerald-400 font-bold text-[10px] uppercase tracking-[0.2em]">আজকের আয়াত ও হাদিস</h3>
+              <h3 className="text-emerald-400 font-bold text-xs uppercase tracking-[0.2em]">আজকের আয়াত ও হাদিস</h3>
               <button onClick={() => fetchAiMotivation(true)} disabled={isRefreshingAi} className={`text-xs ${isRefreshingAi ? 'animate-spin' : ''}`}>🔄</button>
             </div>
-            <p className="text-slate-100 text-sm font-medium leading-relaxed italic">{motivation}</p>
+            <p className="text-slate-100 text-base font-medium leading-relaxed italic">{motivation}</p>
           </div>
         </section>
       )}
@@ -326,15 +326,15 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Detailed Prayer Section */}
       <section className="bg-emerald-900/10 p-5 rounded-2xl border border-emerald-800/10">
         <div className="mb-6">
-          <h3 className="text-2xl font-bold text-emerald-400 border-b-2 border-emerald-800 pb-1 inline-block font-playfair">নামাজের সময়সূচী</h3>
+          <h3 className="text-3xl font-bold text-emerald-400 border-b-2 border-emerald-800 pb-1 inline-block font-playfair">নামাজের সময়সূচী</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-4">
           {/* Left Column: Countdown */}
           <div className="sm:col-span-5 flex flex-col items-center justify-center sm:border-r border-emerald-800/30 sm:pr-4">
             <div className="text-center mb-4">
-              <p className="text-sm font-bold text-emerald-100 leading-tight">{currentPrayer?.name || '---'}-এর ওয়াক্ত</p>
-              <p className="text-xs text-emerald-500 font-medium">শেষ হতে বাকি</p>
+              <p className="text-base font-bold text-emerald-100 leading-tight">{currentPrayer?.name || '---'}-এর ওয়াক্ত</p>
+              <p className="text-sm text-emerald-500 font-medium">শেষ হতে বাকি</p>
             </div>
             
             <div className="relative w-24 h-24 sm:w-28 sm:h-28">
@@ -385,15 +385,15 @@ const Dashboard: React.FC<DashboardProps> = ({
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-[9px] sm:text-[10px] text-emerald-600 font-bold uppercase tracking-tighter">বাকি</span>
-                <span className="text-xs sm:text-sm font-mono font-bold text-amber-400">{currentPrayer?.countdown || '--:--:--'}</span>
+                <span className="text-[10px] sm:text-xs text-emerald-600 font-bold uppercase tracking-tighter">বাকি</span>
+                <span className="text-sm sm:text-base font-mono font-bold text-amber-400">{currentPrayer?.countdown || '--:--:--'}</span>
               </div>
             </div>
           </div>
 
           {/* Right Column: Table */}
           <div className="sm:col-span-7 sm:pl-2">
-            <div className="grid grid-cols-3 text-[9px] font-bold text-emerald-600 uppercase mb-3 border-b border-emerald-800/20 pb-1">
+            <div className="grid grid-cols-3 text-xs font-bold text-emerald-600 uppercase mb-3 border-b border-emerald-800/20 pb-1">
               <span>ওয়াক্ত</span>
               <span className="text-center">শুরু</span>
               <span className="text-right">শেষ</span>
@@ -409,7 +409,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                     { id: 'maghrib', name: 'মাগরিব', start: prayers.maghrib, end: prayers.isha },
                     { id: 'isha', name: 'এশা', start: prayers.isha, end: prayers.fajr },
                   ].map((p) => (
-                    <div key={p.id} className={`grid grid-cols-3 items-center text-[10px] sm:text-[11px] ${currentPrayer?.name === p.name ? 'text-amber-400 font-bold' : 'text-emerald-100/80'}`}>
+                    <div key={p.id} className={`grid grid-cols-3 items-center text-xs sm:text-sm ${currentPrayer?.name === p.name ? 'text-amber-400 font-bold' : 'text-emerald-100/80'}`}>
                       <span>{p.name}</span>
                       <span className="text-center font-mono">{format12h(p.start)}</span>
                       <span className="text-right font-mono">{format12h(p.end)}</span>
@@ -417,7 +417,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                   ))}
                   
                   <div className="pt-2 mt-2 border-t border-emerald-800/20">
-                    <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-bold text-emerald-500">
+                    <div className="flex justify-between items-center text-[10px] sm:text-xs font-bold text-emerald-500">
                       <span className="opacity-60">এশার মাকরূহ ওয়াক্ত শুরু:</span>
                       <span className="font-mono text-emerald-400">{format12h("23:32")}</span>
                     </div>
@@ -432,36 +432,36 @@ const Dashboard: React.FC<DashboardProps> = ({
       {/* Forbidden Times Section */}
       <section className="bg-red-900/10 p-5 rounded-2xl border border-red-900/20">
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-red-400 border-b border-red-900/30 pb-1 inline-block">নামাজের নিষিদ্ধ সময় সমূহ</h3>
+          <h3 className="text-xl font-bold text-red-400 border-b border-red-900/30 pb-1 inline-block">নামাজের নিষিদ্ধ সময় সমূহ</h3>
         </div>
         
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-red-950/30 p-3 rounded-xl border border-red-900/20 text-center">
-            <p className="text-[10px] text-red-500 font-bold uppercase mb-1">সূর্যোদয়</p>
-            <p className="text-[10px] font-mono text-red-200 leading-tight">
+            <p className="text-xs text-red-500 font-bold uppercase mb-1">সূর্যোদয়</p>
+            <p className="text-xs font-mono text-red-200 leading-tight">
               {prayers ? `${format12h(prayers.sunrise)} - ${format12h(adjustTime(prayers.sunrise, 15))}` : '--:--'}
             </p>
           </div>
           <div className="bg-red-950/30 p-3 rounded-xl border border-red-900/20 text-center">
-            <p className="text-[10px] text-red-500 font-bold uppercase mb-1">মধ্যাহ্ন (যাওয়াল)</p>
-            <p className="text-[10px] font-mono text-red-200 leading-tight">
+            <p className="text-xs text-red-500 font-bold uppercase mb-1">মধ্যাহ্ন (যাওয়াল)</p>
+            <p className="text-xs font-mono text-red-200 leading-tight">
               {prayers ? `${format12h(adjustTime(prayers.dhuhr, -10))} - ${format12h(prayers.dhuhr)}` : '--:--'}
             </p>
           </div>
           <div className="bg-red-950/30 p-3 rounded-xl border border-red-900/20 text-center">
-            <p className="text-[10px] text-red-500 font-bold uppercase mb-1">সূর্যাস্ত</p>
-            <p className="text-[10px] font-mono text-red-200 leading-tight">
+            <p className="text-xs text-red-500 font-bold uppercase mb-1">সূর্যাস্ত</p>
+            <p className="text-xs font-mono text-red-200 leading-tight">
               {prayers ? `${format12h(adjustTime(prayers.maghrib, -15))} - ${format12h(prayers.maghrib)}` : '--:--'}
             </p>
           </div>
         </div>
-        <p className="text-[9px] text-red-700 mt-3 italic text-center">* এই সময়গুলোতে যেকোনো ধরণের নামাজ পড়া নিষিদ্ধ।</p>
+        <p className="text-[10px] text-red-700 mt-3 italic text-center">* এই সময়গুলোতে যেকোনো ধরণের নামাজ পড়া নিষিদ্ধ।</p>
       </section>
 
       {/* Share Card Action */}
       {!isAdmin && (
         <div className="flex justify-center pt-2">
-          <button onClick={() => setShowCardModal(true)} className="bg-emerald-900/20 px-6 py-2 rounded-full border border-emerald-800/30 text-[10px] text-emerald-500 uppercase font-bold tracking-widest hover:text-amber-500 transition-colors">
+          <button onClick={() => setShowCardModal(true)} className="bg-emerald-900/20 px-6 py-2 rounded-full border border-emerald-800/30 text-xs text-emerald-500 uppercase font-bold tracking-widest hover:text-amber-500 transition-colors">
             শেয়ার কার্ড জেনারেট করুন 🖼️
           </button>
         </div>
@@ -476,10 +476,10 @@ const Dashboard: React.FC<DashboardProps> = ({
                 <h2 className="text-2xl font-bold font-playfair text-emerald-400 mb-1">আজকের সাফল্য</h2>
                 <div className="bg-emerald-900/20 border border-emerald-800/30 rounded-2xl py-6 my-6">
                   <span className="block text-5xl font-bold text-amber-500">{totalPoints}</span>
-                  <span className="text-xs text-emerald-500 uppercase font-bold tracking-widest">পয়েন্টস</span>
+                  <span className="text-sm text-emerald-500 uppercase font-bold tracking-widest">পয়েন্টস</span>
                 </div>
-                <p className="text-slate-300 text-sm mb-4">{userName}</p>
-                <p className="text-[10px] text-emerald-800 font-bold uppercase tracking-[0.2em]">আমার আমল অ্যাপ</p>
+                <p className="text-slate-300 text-base mb-4">{userName}</p>
+                <p className="text-xs text-emerald-800 font-bold uppercase tracking-[0.2em]">আমার আমল অ্যাপ</p>
               </div>
           </div>
           <div className="flex gap-3 w-full max-w-xs mt-8">
