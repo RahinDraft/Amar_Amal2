@@ -8,6 +8,7 @@ import { getFromStorage, saveToStorage, getTodayDateString } from '../utils/stor
 import { toPng } from 'html-to-image';
 
 interface DashboardProps {
+  todayPoints: number;
   totalPoints: number;
   userName: string;
   completedCount: number;
@@ -18,6 +19,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
+  todayPoints,
   totalPoints, 
   userName, 
   completedCount, 
@@ -276,7 +278,11 @@ const Dashboard: React.FC<DashboardProps> = ({
       <section className="bg-emerald-900/40 p-5 rounded-xl border border-emerald-800/30 flex justify-between items-center">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold text-emerald-400">{getRamadanDay()} রমযান, ১৪৪৭ হিজরী</h2>
-          <p className="text-base opacity-80">{getEnglishDate()}</p>
+          <div className="flex gap-3 items-center">
+            <p className="text-base opacity-80">{getEnglishDate()}</p>
+            <span className="w-1 h-1 bg-emerald-800 rounded-full"></span>
+            <p className="text-sm font-bold text-amber-500">{totalPoints} Pts</p>
+          </div>
           <p className="text-base opacity-60">{getBengaliDate()}</p>
         </div>
         <div className="flex items-center gap-4">
@@ -475,8 +481,14 @@ const Dashboard: React.FC<DashboardProps> = ({
                 <div className="text-4xl mb-4">🌙</div>
                 <h2 className="text-2xl font-bold font-playfair text-emerald-400 mb-1">আজকের সাফল্য</h2>
                 <div className="bg-emerald-900/20 border border-emerald-800/30 rounded-2xl py-6 my-6">
-                  <span className="block text-5xl font-bold text-amber-500">{totalPoints}</span>
-                  <span className="text-sm text-emerald-500 uppercase font-bold tracking-widest">পয়েন্টস</span>
+                  <div className="mb-4">
+                    <span className="block text-4xl font-bold text-amber-500">{todayPoints}</span>
+                    <span className="text-[10px] text-emerald-500 uppercase font-bold tracking-widest">আজকের পয়েন্ট</span>
+                  </div>
+                  <div className="pt-4 border-t border-emerald-800/20">
+                    <span className="block text-2xl font-bold text-amber-400/80">{totalPoints}</span>
+                    <span className="text-[10px] text-emerald-600 uppercase font-bold tracking-widest">মোট পয়েন্ট</span>
+                  </div>
                 </div>
                 <p className="text-slate-300 text-base mb-4">{userName}</p>
                 <p className="text-xs text-emerald-800 font-bold uppercase tracking-[0.2em]">আমার আমল অ্যাপ</p>

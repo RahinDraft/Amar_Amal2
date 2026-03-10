@@ -157,7 +157,10 @@ const App: React.FC = () => {
     return deedPoints + (record.quranPagesRead * 2) + silentPoints + (record.quizPoints || 0);
   }, [deeds]);
 
-  const totalPoints = useMemo(() => history.reduce((acc, h) => acc + calculatePoints(h), 0), [history, calculatePoints]);
+  const totalPoints = useMemo(() => {
+    const otherDaysPoints = history.filter(h => h.date !== today).reduce((acc, h) => acc + calculatePoints(h), 0);
+    return otherDaysPoints + calculatePoints(currentRecord);
+  }, [history, today, currentRecord, calculatePoints]);
 
   useEffect(() => {
     if (userId && !isAdmin) {
@@ -269,7 +272,8 @@ const App: React.FC = () => {
     >
       {activeView === View.DASHBOARD && (
         <Dashboard 
-          totalPoints={todayPoints} 
+          todayPoints={todayPoints} 
+          totalPoints={totalPoints}
           userName={userName} 
           completedCount={currentRecord.completedDeeds.length}
           totalDeeds={deeds.length}
@@ -299,6 +303,7 @@ const App: React.FC = () => {
       {activeView === View.STATS && (
         <Stats 
           history={history} 
+          totalPoints={totalPoints}
           calculatePoints={calculatePoints} 
           onLogout={handleLogout} 
           devName={devName}

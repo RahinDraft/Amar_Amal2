@@ -6,13 +6,14 @@ import { getFromStorage, saveToStorage } from '../utils/storage';
 
 interface StatsProps {
   history: DailyRecord[];
+  totalPoints: number;
   calculatePoints: (record: DailyRecord) => number;
   onLogout: () => void;
   devName: string;
   onViewChange: (view: View) => void;
 }
 
-const Stats: React.FC<StatsProps> = ({ history, calculatePoints, onLogout, devName, onViewChange }) => {
+const Stats: React.FC<StatsProps> = ({ history, totalPoints, calculatePoints, onLogout, devName, onViewChange }) => {
   const userName = getFromStorage('ramadan_user_name', 'ইউজার');
   
   const [showFeedback, setShowFeedback] = useState(false);
@@ -29,7 +30,6 @@ const Stats: React.FC<StatsProps> = ({ history, calculatePoints, onLogout, devNa
   const totalSadaqah = history.reduce((sum, h) => sum + (h.sadaqahAmount || 0), 0);
   const totalQuran = history.reduce((sum, h) => sum + (h.quranPagesRead || 0), 0);
   const totalQuizPoints = history.reduce((sum, h) => sum + (h.quizPoints || 0), 0);
-  const cumulativePoints = history.reduce((sum, h) => sum + calculatePoints(h), 0);
 
   const handleFeedbackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,14 +103,14 @@ const Stats: React.FC<StatsProps> = ({ history, calculatePoints, onLogout, devNa
         <div className="space-y-4">
           <div className="flex justify-between items-center text-xs">
             <span className="text-slate-300">বর্তমান লেভেল: <span className="text-amber-500 font-bold">
-              {cumulativePoints > 1000 ? 'মুহসিন' : cumulativePoints > 300 ? 'মুমিন' : 'মুসলিম'}
+              {totalPoints > 1000 ? 'মুহসিন' : totalPoints > 300 ? 'মুমিন' : 'মুসলিম'}
             </span></span>
-            <span className="text-slate-400">Total: {cumulativePoints} Pts</span>
+            <span className="text-slate-400">Total: {totalPoints} Pts</span>
           </div>
           <div className="w-full bg-emerald-950 rounded-full h-2">
             <div 
               className="bg-gradient-to-r from-amber-600 to-amber-400 h-2 rounded-full transition-all duration-1000" 
-              style={{ width: `${Math.min(100, (cumulativePoints / 2000) * 100)}%` }}
+              style={{ width: `${Math.min(100, (totalPoints / 2000) * 100)}%` }}
             ></div>
           </div>
         </div>
