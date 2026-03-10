@@ -86,6 +86,7 @@ const Quiz: React.FC<QuizProps> = ({ onAwardPoints, currentQuizPoints }) => {
   };
 
   const resetQuiz = () => {
+    setQuestions([]);
     setCurrentQuestionIndex(0);
     setSelectedOption(null);
     setIsAnswered(false);
@@ -94,7 +95,7 @@ const Quiz: React.FC<QuizProps> = ({ onAwardPoints, currentQuizPoints }) => {
     fetchNewQuestions(); // Fetch fresh 10 questions for the next round
   };
 
-  if (isFetching && questions.length === 0) {
+  if ((isFetching || !currentQuestion) && !showResult) {
     return (
       <div className="flex flex-col items-center justify-center p-12 space-y-4">
         <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
