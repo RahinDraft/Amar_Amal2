@@ -294,18 +294,18 @@ const Dashboard: React.FC<DashboardProps> = ({
       </section>
 
       {/* Sahri & Iftar Quick View */}
-      <section className="grid grid-cols-2 xs:grid-cols-3 gap-2">
-        <div className="bg-emerald-900/20 p-3 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-xs sm:text-sm font-bold text-slate-100">{format12h(prayers?.imsak || '')}</div>
-          <div className="text-[9px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">সাহরি শেষ</div>
+      <section className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
+          <div className="text-[10px] sm:text-sm font-bold text-slate-100">{format12h(prayers?.imsak || '')}</div>
+          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">সাহরি শেষ</div>
         </div>
-        <div className="bg-emerald-900/20 p-3 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-xs sm:text-sm font-bold text-slate-100">{format12h(prayers?.maghrib || '')}</div>
-          <div className="text-[9px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">ইফতারের সময়</div>
+        <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
+          <div className="text-[10px] sm:text-sm font-bold text-slate-100">{format12h(prayers?.maghrib || '')}</div>
+          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">ইফতারের সময়</div>
         </div>
-        <div className="col-span-2 xs:col-span-1 bg-emerald-900/20 p-3 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
-          <div className="text-xs sm:text-sm font-bold text-emerald-400 font-mono">{countdown?.time || '--:--:--'}</div>
-          <div className="text-[9px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">{countdown?.label || 'সাহরির বাকি'}</div>
+        <div className="bg-emerald-900/20 p-2 sm:p-4 rounded-xl border border-emerald-800/20 text-center space-y-1 sm:space-y-2">
+          <div className="text-[10px] sm:text-sm font-bold text-emerald-400 font-mono">{countdown?.time || '--:--:--'}</div>
+          <div className="text-[8px] sm:text-[10px] opacity-60 uppercase font-bold tracking-tighter">{countdown?.label || 'সাহরির বাকি'}</div>
         </div>
       </section>
 
